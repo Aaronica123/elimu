@@ -1,121 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import AppLayout from "@/components/AppLayout";
+import LoginPage from "@/pages/LoginPage";
+import DashboardPage from "@/pages/DashboardPage";
+import StudentsPage from "@/pages/StudentsPage";
+import SubjectsPage from "@/pages/SubjectsPage";
+import MarksEntryPage from "@/pages/MarksEntryPage";
+import AiAnalysisPage from "@/pages/AiAnalysisPage";
+import ReportsPage from "@/pages/ReportsPage";
+import RegisterUsersPage from "@/pages/RegisterUsersPage";
+import UserManagementPage from "@/pages/UserManagementPage";
+import AuditLogsPage from "@/pages/AuditLogsPage";
+import MyChildPage from "@/pages/MyChildPage";
+import NotFound from "@/pages/NotFound";
 
-function App() {
-  const [count, setCount] = useState(0)
+const queryClient = new QueryClient();
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      <div className="ticks"></div>
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/students" element={<StudentsPage />} />
+                <Route path="/subjects" element={<SubjectsPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
+                <Route path="/ai-analysis" element={<AiAnalysisPage />} />
+              </Route>
+            </Route>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+            <Route element={<ProtectedRoute allowedRoles={["TEACHER"]} />}>
+              <Route element={<AppLayout />}>
+                <Route path="/marks" element={<MarksEntryPage />} />
+              </Route>
+            </Route>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+            <Route element={<ProtectedRoute allowedRoles={["IT_HANDLER"]} />}>
+              <Route element={<AppLayout />}>
+                <Route path="/register-users" element={<RegisterUsersPage />} />
+              </Route>
+            </Route>
 
-export default App
+            <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+              <Route element={<AppLayout />}>
+                <Route path="/user-management" element={<UserManagementPage />} />
+                <Route path="/role-management" element={<UserManagementPage />} />
+                <Route path="/audit-logs" element={<AuditLogsPage />} />
+              </Route>
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={["PARENT"]} />}>
+              <Route element={<AppLayout />}>
+                <Route path="/my-child" element={<MyChildPage />} />
+              </Route>
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
+
+export default App;
+
