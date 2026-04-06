@@ -1,6 +1,6 @@
-import { Card, CardContent } from "../../components/ui/card"; // relative path
-import { Input } from "../../components/ui/input";
-import { Badge } from "../../components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   BookOpen,
   Search,

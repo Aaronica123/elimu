@@ -16,14 +16,13 @@ const MarksEntryPage = () => {
     academicYear: "2024",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: api.post("/marks", formData)
     toast.success("Marks uploaded successfully", {
-      description: `Marks saved for ${formData.admissionNumber}`,
+      position: "top-right",
     });
   };
-
   return (
     <div className="animate-fade-in max-w-2xl">
       <div className="mb-6">

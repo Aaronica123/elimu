@@ -13,7 +13,7 @@ import SubjectsPage from "@/pages/SubjectsPage";
 import MarksEntryPage from "@/pages/MarksEntryPage";
 import AiAnalysisPage from "@/pages/AiAnalysisPage";
 import ReportsPage from "@/pages/ReportsPage";
-import RegisterUsersPage from "@/pages/RegisterUsersPage";
+import RegisterUserPage from "@/pages/RegisterUserPage";
 import UserManagementPage from "@/pages/UserManagementPage";
 import AuditLogsPage from "@/pages/AuditLogsPage";
 import MyChildPage from "@/pages/MyChildPage";
@@ -50,7 +50,7 @@ const App = () => (
 
             <Route element={<ProtectedRoute allowedRoles={["IT_HANDLER"]} />}>
               <Route element={<AppLayout />}>
-                <Route path="/register-users" element={<RegisterUsersPage />} />
+                <Route path="/register-users" element={<RegisterUserPage />} />
               </Route>
             </Route>
 
@@ -77,4 +77,3 @@ const App = () => (
 );
 
 export default App;
-
