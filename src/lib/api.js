@@ -2,6 +2,7 @@
 // Update BASE_URL when deploying or connecting to the real backend
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+const s="https://elimu-predict-backend.onrender.com/api/v1"
 
 class ApiClient {
   getToken() {
@@ -16,7 +17,7 @@ class ApiClient {
     };
     if (token) headers["Authorization"] = `Bearer ${token}`;
 
-    const res = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
+    const res = await fetch(`${s}${endpoint}`, { ...options, headers });
 
     if (res.status === 401) {
       sessionStorage.removeItem("elimu_token");

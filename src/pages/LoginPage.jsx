@@ -8,17 +8,17 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Eye, EyeOff, GraduationCap, Loader2, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import loginBg from "@/assets/login-bg.jpg";
-
+import ApiClient from "../lib/api"
 // Demo accounts for frontend development — remove when connecting to real backend
-const DEMO_ACCOUNTS = {
-  "TCH001": { password: "teacher123", role: "TEACHER", fullName: "Jane Wanjiku" },
-  "SNR001": { password: "senior123", role: "SENIOR_TEACHER", fullName: "Peter Ochieng" },
-  "PRC001": { password: "principal123", role: "PRINCIPAL", fullName: "Dr. Mary Akinyi" },
-  "DPC001": { password: "deputy123", role: "DEPUTY_PRINCIPAL", fullName: "John Kamau" },
-  "ITH001": { password: "ithandler123", role: "IT_HANDLER", fullName: "Kevin Mwangi" },
-  "ADM001": { password: "admin123", role: "ADMIN", fullName: "Susan Njeri" },
-  "PAR001": { password: "parent123", role: "PARENT", fullName: "Grace Atieno" },
-};
+// const DEMO_ACCOUNTS = {
+//   "TCH001": { password: "teacher123", role: "TEACHER", fullName: "Jane Wanjiku" },
+//   "SNR001": { password: "senior123", role: "SENIOR_TEACHER", fullName: "Peter Ochieng" },
+//   "PRC001": { password: "principal123", role: "PRINCIPAL", fullName: "Dr. Mary Akinyi" },
+//   "DPC001": { password: "deputy123", role: "DEPUTY_PRINCIPAL", fullName: "John Kamau" },
+//   "ITH001": { password: "ithandler123", role: "IT_HANDLER", fullName: "Kevin Mwangi" },
+//   "ADM001": { password: "admin123", role: "ADMIN", fullName: "Susan Njeri" },
+//   "PAR001": { password: "parent123", role: "PARENT", fullName: "Grace Atieno" },
+// };
 
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
@@ -26,7 +26,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { user,token,login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -40,24 +40,40 @@ const LoginPage = () => {
 
     setIsLoading(true);
 
-    // TODO: Replace with real API call
-    await new Promise((r) => setTimeout(r, 800));
+   
+    try{
+      const resp=await ApiClient.post('/auth/login',{"username":userId,"password":password})
+      const lt=[resp.username,resp.role,resp.message]
+    login(resp.token,lt)
+    const user_1=user[1]
+    const use=sessionStorage.getItem("elimu_user")
+    setIsLoading(false)
+    
+    alert('communicating'+"user is" +user_1+"token is")
 
-    const demo = DEMO_ACCOUNTS[userId.toUpperCase()];
-    if (demo && demo.password === password) {
-      login("demo-jwt-token", {
-        id: 1,
-        fullName: demo.fullName,
-        userId: userId.toUpperCase(),
-        role: demo.role,
-        isActive: true,
-      });
-      setIsLoading(false);
-      navigate("/dashboard");
-    } else {
-      setIsLoading(false);
-      setError("Invalid credentials. Only registered school staff and parents can access this system.");
     }
+    catch(error){
+      setIsLoading(false)
+      alert(error.message)
+
+    }
+    
+
+    // const demo = DEMO_ACCOUNTS[userId.toUpperCase()];
+    // if (demo && demo.password === password) {
+    //   login("demo-jwt-token", {
+    //     id: 1,
+    //     fullName: demo.fullName,
+    //     userId: userId.toUpperCase(),
+    //     role: demo.role,
+    //     isActive: true,
+    //   });
+    //   setIsLoading(false);
+    //   navigate("/dashboard");
+    // } else {
+    //   setIsLoading(false);
+    //   setError("Invalid credentials. Only registered school staff and parents can access this system.");
+    // }
   };
 
   return (
