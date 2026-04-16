@@ -46,10 +46,11 @@ const LoginPage = () => {
       const lt=[resp.username,resp.role,resp.message]
     login(resp.token,lt)
     const user_1=user[1]
-    const use=sessionStorage.getItem("elimu_user")
+    
     setIsLoading(false)
     
-    alert('communicating'+"user is" +user_1+"token is")
+    alert('communicating'+"user is" +user_1+"token is");
+    navigate("/dashboard");
 
     }
     catch(error){

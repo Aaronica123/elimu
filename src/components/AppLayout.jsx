@@ -15,7 +15,7 @@ const AppLayout = () => {
 
   if (!user) return null;
 
-  const navItems = getNavForRole(user.role);
+  const navItems = getNavForRole(user[1]);
 
   const handleLogout = () => {
     logout();
@@ -32,7 +32,7 @@ const AppLayout = () => {
             Elimu-Predict
           </span>
           <span className="text-xs text-sidebar-muted truncate block">
-            {ROLE_LABELS[user.role]}
+            {ROLE_LABELS[user[1]]}
           </span>
         </div>
       </div>
@@ -63,11 +63,11 @@ const AppLayout = () => {
       <div className="px-4 py-4 border-t border-sidebar-border">
         <div className="flex items-center gap-3 mb-3">
           <div className="h-9 w-9 rounded-full gradient-primary flex items-center justify-center text-sm font-bold text-primary-foreground shrink-0">
-            {user.fullName.charAt(0)}
+            {user[0]}
           </div>
           <div className="overflow-hidden">
-            <p className="text-sm font-medium text-sidebar-accent-foreground truncate">{user.fullName}</p>
-            <p className="text-xs text-sidebar-muted truncate">{user.userId}</p>
+            <p className="text-sm font-medium text-sidebar-accent-foreground truncate">{user[0]}</p>
+            <p className="text-xs text-sidebar-muted truncate">{user[0]}</p>
           </div>
         </div>
         <Button

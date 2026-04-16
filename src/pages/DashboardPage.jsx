@@ -155,6 +155,7 @@ const ParentDashboard = () => (
 );
 
 const AdminDashboard = () => (
+  
   <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
     <motion.div variants={item}><StatCard label="Total Users" value={76} icon={Users} variant="primary" /></motion.div>
     <motion.div variants={item}><StatCard label="Active Sessions" value={23} icon={TrendingUp} variant="success" /></motion.div>
@@ -173,16 +174,16 @@ const DashboardPage = () => {
     <div className="animate-fade-in">
       <div className="mb-8">
         <h1 className="text-2xl lg:text-3xl font-heading font-bold text-foreground">
-          {greetingTime}, {user.fullName.split(" ")[0]}
+          {greetingTime} {user[0]}
         </h1>
         <p className="text-muted-foreground mt-1">Here's your overview for today</p>
       </div>
 
-      {(user.role === "TEACHER") && <TeacherDashboard />}
-      {(user.role === "PRINCIPAL" || user.role === "DEPUTY_PRINCIPAL") && <PrincipalDashboard />}
-      {user.role === "SENIOR_TEACHER" && <PrincipalDashboard />}
-      {user.role === "PARENT" && <ParentDashboard />}
-      {(user.role === "ADMIN" || user.role === "IT_HANDLER") && <AdminDashboard />}
+      {(user[1] === "TEACHER") && <TeacherDashboard />}
+      {(user[1] === "PRINCIPAL" || user[1]=== "DEPUTY_PRINCIPAL") && <PrincipalDashboard />}
+      {user[1] === "SENIOR_TEACHER" && <PrincipalDashboard />}
+      {user[1] === "PARENT" && <ParentDashboard />}
+      {(user[1] === "ADMIN" || user[1] === "IT_HANDLER") && <AdminDashboard />}
     </div>
   );
 };
