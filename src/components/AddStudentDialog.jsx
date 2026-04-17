@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Plus, GraduationCap, UserCheck } from "lucide-react";
+import ApiClient from '../lib/api'
 import { toast } from "sonner";
+
 
 const INITIAL = {
   admissionNo: "",
@@ -19,6 +21,7 @@ const INITIAL = {
   parentPhone: "",
   parentEmail: "",
   parentRelationship: "",
+  today:new Date()
 };
 
 const AddStudentDialog = () => {
@@ -27,14 +30,31 @@ const AddStudentDialog = () => {
 
   const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // TODO: api.post("/students", form)
+    try{
+      const resp=await ApiClient.post('/students',{
+      'admissionNumber':form.admissionNo,
+      'fullName':form.fullName,
+      'className':form.className,
+      // 'parentID':form.parentIdNumber,
+      'enrollmentYear':form.today.getDate()
+      
+    })
+    alert("student has been created on"+resp.createdAt)
+
+    setForm(INITIAL);
+    setOpen(false);
+    }
+    
+    catch(error){
+      alert(error.message)
+    }
+    
     toast.success("Student registered successfully", {
       description: `${form.fullName} linked to parent ${form.parentFullName}`,
     });
-    setForm(INITIAL);
-    setOpen(false);
+    
   };
 
   return (
